@@ -40,7 +40,14 @@
 		float seconds = (minutes/1000.0)/60.0;
 		minutes = floor(seconds);
 		seconds = ceil((seconds - minutes) * 60);
-		NSString *length_string = [[[NSString alloc] initWithFormat:@"%i:%02i",minutes,(int)seconds] autorelease];
+		NSString *length_string = [[[NSString alloc] init] autorelease];
+		if (minutes > 60) {
+			UInt32 hours = (minutes/60);
+			minutes = minutes % 60;
+			length_string = [NSString stringWithFormat:@"%i:%02i:%02i",hours,minutes,(int)seconds];
+		} else {
+			length_string = [NSString stringWithFormat:@"%i:%02i",minutes,(int)seconds];
+		}
 		[the_track setObject:length_string forKey:@"Length"];
 		float percent = (([[the_track valueForKey:@"Total Time"] intValue] / 1000.0) * [[the_track valueForKey:@"Play Count"] intValue]);
 		percent = (percent / [db getMaster]) * 100.0;
